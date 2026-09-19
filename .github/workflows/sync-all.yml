@@ -32,12 +32,12 @@ jobs:
             echo "-----------------------------------------------"
             
             # Clone from GitHub safely using built-in public tokens
-            git clone --mirror "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com"
+            git clone --mirror "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GH_USER/$repo.git"
             
             cd "$repo.git"
             
             # Push to GitLab using your hidden Personal Access Token secret
-            git push --mirror "https://oauth2:${{ secrets.BACKUP_TOKEN }}@://gitlab.com"
+            git push --mirror "https://oauth2:${{ secrets.BACKUP_TOKEN }}@gitlab.com/$GL_USER/$repo.git"
             
             cd ..
             rm -rf "$repo.git"
