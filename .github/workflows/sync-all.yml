@@ -18,7 +18,28 @@ jobs:
           
           # 2. 🟢 LIST ALL YOUR REPO NAMES HERE (Separated by spaces)
           # You can include your chromium fork; the script will skip it automatically!
-          REPOS=("chromium")
+          REPOS=(
+            "gitlab-sync"
+            "Lichess-MakeChessBetter"
+            "chess-network-graph"
+            "sibling-terminal-trap"
+            "Strong-Password-maker"
+            "r-progression-framework"
+            "java-snake-game"
+            "ecommerce-analytics"
+            "rust-calc"
+            "scala-graphing-calculator"
+            "github-following-checker"
+            "manim"
+            "chess-matrix-explorer"
+            "Fetch-YT-Data"
+            "GoogleHub67.github.io"
+            "DrawffyFish"
+            "Chess-Violence-Heatmap"
+            "Basic_Python"
+            "NASA-terminal-dashboard"
+            "chromium"
+          )
 
           for repo in "${REPOS[@]}"; do
             # 🛑 Automatically ignores Chromium so you don't blow past the 10GB limit
