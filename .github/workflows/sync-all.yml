@@ -18,7 +18,7 @@ jobs:
           
           # 2. 🟢 LIST ALL YOUR REPO NAMES HERE (Separated by spaces)
           # You can include your chromium fork; the script will skip it automatically!
-          REPOS=("repo1" "repo2" "repo3" "chromium")
+          REPOS=("chromium")
 
           for repo in "${REPOS[@]}"; do
             # 🛑 Automatically ignores Chromium so you don't blow past the 10GB limit
