@@ -17,7 +17,6 @@ jobs:
           GL_USER="GoogleHub67"
           
           # 2. 🟢 LIST ALL YOUR REPO NAMES HERE (Separated by spaces)
-          # You can include your chromium fork; the script will skip it automatically!
           REPOS=(
             "gitlab-sync"
             "Lichess-MakeChessBetter"
@@ -42,7 +41,6 @@ jobs:
           )
 
           for repo in "${REPOS[@]}"; do
-            # 🛑 Automatically ignores Chromium so you don't blow past the 10GB limit
             if [[ "$repo" =~ [Cc]hromium ]]; then
               echo "⚠️ Skipping $repo (Too massive for free tier storage limits)."
               continue
@@ -52,13 +50,16 @@ jobs:
             echo "Syncing $repo..."
             echo "-----------------------------------------------"
             
-            # Clone from GitHub safely using built-in public tokens
+            # Clone from GitHub
             git clone --mirror "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GH_USER/$repo.git"
             
             cd "$repo.git"
             
-            # Push to GitLab using your hidden Personal Access Token secret
-            git push --mirror "https://oauth2:${{ secrets.BACKUP_TOKEN }}@gitlab.com/$GL_USER/$repo.git"
+            # Attempt a clean mirror push. If it fails due to branch protection, try pushing explicitly.
+            if ! git push --mirror "https://oauth2:${{ secrets.BACKUP_TOKEN }}@gitlab.com/$GL_USER/$repo.git"; then
+              echo "⚠️ Mirror failed (likely due to branch protections). Trying fallback push..."
+              git push --force "https://oauth2:${{ secrets.BACKUP_TOKEN }}@gitlab.com/$GL_USER/$repo.git" 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' || echo "❌ Failed to sync $repo completely."
+            fi
             
             cd ..
             rm -rf "$repo.git"
