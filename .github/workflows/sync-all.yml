@@ -14,11 +14,14 @@ jobs:
         run: |
           # 1. 🟢 UPDATE THESE TO YOUR ACTUAL USERNAMES
           GH_USER="GoogleHub67"
-          GL_USER="GoogleHub67"
+          GL_USER="gh67-backups"
           
           # 2. 🟢 LIST ALL YOUR REPO NAMES HERE (Separated by spaces)
           REPOS=(
             "gitlab-sync"
+            "ruby-text-editor"
+            "basic-arduino-scripts"
+            "CPY"
             "Lichess-MakeChessBetter"
             "chess-network-graph"
             "sibling-terminal-trap"
