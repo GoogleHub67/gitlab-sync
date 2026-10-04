@@ -18,6 +18,7 @@ jobs:
           
           # 2. 🟢 LIST ALL YOUR REPO NAMES HERE (Separated by spaces)
           REPOS=(
+            "local-ssd-file-mapper"
             "gitlab-sync"
             "ruby-text-editor"
             "basic-arduino-scripts"
