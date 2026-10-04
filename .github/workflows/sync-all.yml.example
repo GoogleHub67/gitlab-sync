@@ -1,0 +1,53 @@
+name: Open Source Master Sync to GitLab
+
+on:
+  schedule:
+    # 🟢 CHOOSE YOUR RUN INTERVAL (Commented out to prevent errors)
+    # Replace the text below with your chosen timing parameters (e.g., '0 */6 * * *')
+    - cron: 'MINUTE HOUR DAY MONTH DAY_OF_WEEK' 
+  workflow_dispatch: # Allows you to trigger the backup manually with 1 click
+
+jobs:
+  sync-everything:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync Repositories Safely to GitLab
+        run: |
+          # 1. 🟢 UPDATE THESE TO YOUR ACTUAL USERNAMES
+          GH_USER="YOUR_GITHUB_USERNAME"
+          GL_USER="YOUR_GITLAB_USERNAME"
+          
+          # 2. 🟢 LIST ALL YOUR REPO NAMES HERE (Separated by spaces)
+          REPOS=(
+            "repo-one"
+            "repo-two"
+			"repo-three"
+            "monorepo-one"
+            "monorepo-two"
+            "my-awesome-project"
+          )
+
+          for repo in "${REPOS[@]}"; do
+            if [[ "$repo" =~ [Mm]onorepo-one ]] || [[ "$repo" =~ [Mm]onorepo-two ]]; then
+              echo "⚠️ Skipping $repo (Too massive for free tier storage limits)."
+              continue
+            fi
+
+            echo "-----------------------------------------------"
+            echo "Syncing $repo..."
+            echo "-----------------------------------------------"
+            
+            # Clone from GitHub
+            git clone --mirror "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GH_USER/$repo.git"
+            
+            cd "$repo.git"
+            
+            # Attempt a clean mirror push. If it fails due to branch protection, try pushing explicitly.
+            if ! git push --mirror "https://oauth2:${{ secrets.BACKUP_TOKEN }}@gitlab.com/$GL_USER/$repo.git"; then
+              echo "⚠️ Mirror failed (likely due to branch protections). Trying fallback push..."
+              git push --force "https://oauth2:${{ secrets.BACKUP_TOKEN }}@gitlab.com/$GL_USER/$repo.git" 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' || echo "❌ Failed to sync $repo completely."
+            fi
+            
+            cd ..
+            rm -rf "$repo.git"
+          done
