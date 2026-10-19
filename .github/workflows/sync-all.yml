@@ -1,5 +1,4 @@
-name: Open Source Master Sync to GitLab
-
+name: GITLAB_SYNC
 on:
   schedule:
     # Runs automatically every 6 hours
@@ -61,9 +60,9 @@ jobs:
             cd "$repo.git"
             
             # Attempt a clean mirror push. If it fails due to branch protection, try pushing explicitly.
-            if ! git push --mirror "https://oauth2:${{ secrets.BACKUP_TOKEN }}@gitlab.com/$GL_USER/$repo.git"; then
+            if ! git push --mirror "https://oauth2:${{ secrets.GITLAB_SYNC }}@gitlab.com/$GL_USER/$repo.git"; then
               echo "⚠️ Mirror failed (likely due to branch protections). Trying fallback push..."
-              git push --force "https://oauth2:${{ secrets.github-sync }}@gitlab.com/$GL_USER/$repo.git" 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' || echo "❌ Failed to sync $repo completely."
+              git push --force "https://oauth2:${{ secrets.GITLAB_SYNC }}@gitlab.com/$GL_USER/$repo.git" 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' || echo "❌ Failed to sync $repo completely."
             fi
             
             cd ..
