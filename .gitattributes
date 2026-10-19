@@ -1,0 +1,4 @@
+# Force Linguist to track the workflows directory and count the YAML files
+.github/workflows/* linguist-vendored=false
+.github/workflows/*.yml linguist-detectable=true
+.github/workflows/*.yaml linguist-detectable=true
