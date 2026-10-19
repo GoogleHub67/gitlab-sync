@@ -1,4 +1,4 @@
-name: GITLAB_SYNC
+name: Open Source Master Sync to GitLab
 on:
   schedule:
     # Runs automatically every 6 hours
